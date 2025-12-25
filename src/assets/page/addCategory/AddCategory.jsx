@@ -38,7 +38,7 @@ export default function AddCategory() {
 
   return (
     <div className={style.pageContainer}>
-      <NavBar currenLoaction="addCategory" />
+      <NavBar />
       <div className={style.mainContent}>
         <div className={style.gradientBox}>
           <div className={style.innerContent}>

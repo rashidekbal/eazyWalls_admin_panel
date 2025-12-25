@@ -6,7 +6,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './assets/page/home/Home.jsx'
 import AddWallpaper from './assets/page/addWallpaper/AddWallpaper.jsx'
 import AddCategory from "./assets/page/addCategory/AddCategory.jsx"
-import EditType from './assets/page/editType/EditType.jsx'
+import EditTrending from './assets/page/editTrending/EditTrending.jsx'
+import EditFeatured from './assets/page/editFeatured/EditFeatured.jsx'
+import AddTrending from './assets/page/addTrending/AddTrending.jsx'
+import AddFeatured from './assets/page/addFeatured/AddFeatured.jsx'
+
+import CategoryView from './assets/page/categoryView/CategoryView.jsx'
+import EditCategory from './assets/page/editCategory/EditCategory.jsx'
+
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -24,8 +31,30 @@ const Router = createBrowserRouter([
         path: "addCategory",
         element: <AddCategory />
       },
-      {path:"editType",
-      element:<EditType/>}
+      {
+        path: "edit-trending",
+        element: <EditTrending />
+      },
+      {
+        path: "edit-featured",
+        element: <EditFeatured />
+      },
+      {
+        path: "add-trending",
+        element: <AddTrending />
+      },
+      {
+        path: "add-featured",
+        element: <AddFeatured />
+      },
+      {
+        path: "category/:categoryName",
+        element: <CategoryView />
+      },
+      {
+        path: "edit-category",
+        element: <EditCategory />
+      }
     ]
   }
 ])

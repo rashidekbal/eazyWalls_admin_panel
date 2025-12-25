@@ -137,3 +137,25 @@
 .submitBtn:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 600px) {
+  .pageContainer {
+    padding: 10px;
+  }
+
+  .mainContent {
+    padding: 0;
+  }
+
+  .gradientBox {
+    max-width: 100%;
+  }
+
+  .innerContent {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+}

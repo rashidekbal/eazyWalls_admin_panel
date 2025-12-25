@@ -1,0 +1,244 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #121212;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+}
+
+.header {
+  padding: 30px 40px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #fff, #aaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 1rem;
+}
+
+.galleryContainer {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Masonry Layout */
+.masonryGrid {
+  column-count: 5;
+  column-gap: 15px;
+}
+
+@media (max-width: 1200px) {
+  .masonryGrid {
+    column-count: 4;
+  }
+}
+
+@media (max-width: 900px) {
+  .masonryGrid {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .masonryGrid {
+    column-count: 2;
+  }
+}
+
+.masonryItem {
+  break-inside: avoid; /* Prevent split across columns */
+  margin-bottom: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.masonryItem:hover {
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+.img {
+  width: 100%;
+  display: block;
+}
+
+/* Regular Grid Layout */
+.regularGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.regularGrid .img {
+  height: 300px; /* Fixed Height for Grid */
+  object-fit: cover;
+}
+
+/* Header Controls */
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggleGroup {
+  display: flex;
+  background-color: #2a2a2a;
+  padding: 4px;
+  border-radius: 8px;
+  gap: 5px;
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.toggleBtn:hover {
+  color: #fff;
+}
+
+.toggleBtn.active {
+  background-color: #444;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Toolbar Styles */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  background-color: #252525;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+}
+
+.toolbarGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actionBtn {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.actionBtn:hover {
+  background-color: #444;
+  border-color: #666;
+}
+
+.removeBtn {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b); /* Red gradient */
+  border: none;
+  font-weight: 600;
+  margin-left: auto; /* Push to right */
+  color: white;
+}
+
+.removeBtn:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(255, 75, 43, 0.4);
+}
+
+.removeBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #555;
+  box-shadow: none;
+}
+
+/* Selection Styles */
+.masonryItem, .regularGrid > div { /* Target both modes */
+  cursor: pointer;
+  border: 2px solid transparent; /* Prepare for selection border */
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.selected {
+  border-color: #00d4ff !important;
+}
+
+.selectionOverlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #00d4ff;
+}
+
+/* Pagination Styles */
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 30px 0;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.pageBtn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: #444;
+}
+
+.pageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.activePageBtn {
+  background: linear-gradient(90deg, #00d4ff, #005bea);
+  font-weight: 600;
+  color: #fff;
+}
