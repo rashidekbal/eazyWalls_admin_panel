@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { context } from "../../../Store";
 import NavBar from "../../components/NavBar";
 import style from "./AddWallpaper.module.css";
@@ -66,9 +67,10 @@ export default function AddWallpaper() {
     const trending = isTrending;
     const featured = isFeatured;
     if (!authorName || !file || !categoryTitle || !tag) {
-      alert("please add the required filed");
+      toast.warn("Please fill all required fields");
       return;
     }
+    setIsUploading(true);
     const dataPacket = {
       file,
       category: categoryTitle,
@@ -77,7 +79,22 @@ export default function AddWallpaper() {
       isTrenidng: trending,
       isFeatured: featured,
     };
-    data.AddWallpaper(dataPacket, setIsUploading);
+    data.AddWallpaper(dataPacket, (status, message) => {
+      setIsUploading(false);
+      if (status) {
+        toast.success(message);
+        setImage(null);
+        setAuthor("");
+        setCategory("");
+        setTags([]);
+        setTagInput("");
+        setIsTrending(false);
+        setIsFeatured(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      } else {
+        toast.error(message);
+      }
+    });
   };
 
   return (
@@ -210,8 +227,9 @@ export default function AddWallpaper() {
               onClick={() => {
                 handleFormSubmit();
               }}
+              disabled={isUploading}
             >
-              Add Wallpaper
+              {isUploading ? "Uploading..." : "Add Wallpaper"}
             </button>
           </div>
         </div>

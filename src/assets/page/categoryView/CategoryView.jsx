@@ -1,19 +1,10 @@
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import NavBar from "../../components/NavBar";
 import style from "./CategoryView.module.css";
 import { useState, useEffect, useContext } from "react";
 import Loader from "../../components/Loader";
 import { context } from "../../../Store";
-
-// Generate Dummy Data with Random Heights (External to component to simulate DB)
-const initialWallpapers = Array.from({ length: 250 }).map((_, i) => ({
-  _id: `cat-wall-${i}`,
-  height: Math.floor(Math.random() * (600 - 300 + 1)) + 300,
-  url: `https://picsum.photos/seed/${i * 123}/300/${
-    Math.floor(Math.random() * (600 - 300 + 1)) + 300
-  }`,
-}));
-
 export default function CategoryView() {
   const data = useContext(context);
   const { categoryName } = useParams();
@@ -68,12 +59,18 @@ export default function CategoryView() {
 
   const handleRemove = () => {
     setIsRemoving(true);
-    // Simulate Server Request
-    setTimeout(() => {
-      setWallpapers((prev) => prev.filter((w) => !selectedIds.has(w._id)));
-      setSelectedIds(new Set());
+    data.deleteWallpapers(selectedIds, (status, message) => {
       setIsRemoving(false);
-    }, 2000);
+      if (status) {
+        toast.success(message);
+        data.setWallpapers((prev) =>
+          prev.filter((w) => !selectedIds.has(w._id))
+        );
+        setSelectedIds(new Set());
+      } else {
+        toast.error(message);
+      }
+    });
   };
 
   const isAllSelected =
