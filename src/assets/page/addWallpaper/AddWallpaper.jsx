@@ -1,8 +1,10 @@
+import { context } from "../../../Store";
 import NavBar from "../../components/NavBar";
 import style from "./AddWallpaper.module.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 
 export default function AddWallpaper() {
+  const data = useContext(context);
   const [image, setImage] = useState(null);
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
@@ -11,6 +13,7 @@ export default function AddWallpaper() {
   const [isTrending, setIsTrending] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
 
   // Drag & Drop Handlers
@@ -53,7 +56,28 @@ export default function AddWallpaper() {
   };
 
   const removeTag = (tagToRemove) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+  const handleFormSubmit = () => {
+    const authorName = author;
+    const file = image;
+    const categoryTitle = category;
+    const tag = tags.join(",");
+    const trending = isTrending;
+    const featured = isFeatured;
+    if (!authorName || !file || !categoryTitle || !tag) {
+      alert("please add the required filed");
+      return;
+    }
+    const dataPacket = {
+      file,
+      category: categoryTitle,
+      tags: tag,
+      authorName,
+      isTrenidng: trending,
+      isFeatured: featured,
+    };
+    data.AddWallpaper(dataPacket, setIsUploading);
   };
 
   return (
@@ -63,28 +87,37 @@ export default function AddWallpaper() {
         <div className={style.gradientBox}>
           <div className={style.innerContent}>
             <h2 className={style.title}>Add New Wallpaper</h2>
-            
+
             {/* Image Upload Section */}
-            <div 
-              className={`${style.dropZone} ${isDragOver ? style.dragOver : ''}`}
+            <div
+              className={`${style.dropZone} ${
+                isDragOver ? style.dragOver : ""
+              }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current.click()}
             >
-              <input 
-                type="file" 
-                hidden 
-                ref={fileInputRef} 
-                onChange={handleFileSelect} 
+              <input
+                type="file"
+                hidden
+                ref={fileInputRef}
+                onChange={handleFileSelect}
                 accept="image/*"
               />
               {image ? (
-                <div className={style.imagePreview} onClick={(e) => e.stopPropagation()}>
-                  <img src={URL.createObjectURL(image)} alt="Preview" className={style.previewImg} />
+                <div
+                  className={style.imagePreview}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt="Preview"
+                    className={style.previewImg}
+                  />
                   <p>{image.name}</p>
-                  <button 
-                    className={style.clearBtn} 
+                  <button
+                    className={style.clearBtn}
                     onClick={(e) => {
                       e.stopPropagation();
                       setImage(null);
@@ -109,19 +142,24 @@ export default function AddWallpaper() {
                 placeholder="Enter Author Name"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                style={{marginBottom: '15px'}}
+                style={{ marginBottom: "15px" }}
               />
 
-              <select 
+              <select
                 className={style.selectInput}
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="" disabled>Select Category</option>
-                <option value="Nature">Nature</option>
-                <option value="Abstract">Abstract</option>
-                <option value="Cars">Cars</option>
-                <option value="Anime">Anime</option>
+                <option value="" disabled>
+                  Select Category
+                </option>
+                {data.categories.map((item, id) => {
+                  return (
+                    <option key={id} value={item.title}>
+                      {item.title}
+                    </option>
+                  );
+                })}
               </select>
 
               <div className={style.tagInputContainer}>
@@ -129,7 +167,12 @@ export default function AddWallpaper() {
                   {tags.map((tag, index) => (
                     <span key={index} className={style.tagPill}>
                       {tag}
-                      <button onClick={() => removeTag(tag)} className={style.removeTagBtn}>×</button>
+                      <button
+                        onClick={() => removeTag(tag)}
+                        className={style.removeTagBtn}
+                      >
+                        ×
+                      </button>
                     </span>
                   ))}
                 </div>
@@ -144,16 +187,16 @@ export default function AddWallpaper() {
 
               <div className={style.checkboxGroup}>
                 <label className={style.checkboxLabel}>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={isTrending}
                     onChange={(e) => setIsTrending(e.target.checked)}
                   />
                   Trending
                 </label>
                 <label className={style.checkboxLabel}>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={isFeatured}
                     onChange={(e) => setIsFeatured(e.target.checked)}
                   />
@@ -162,7 +205,12 @@ export default function AddWallpaper() {
               </div>
             </div>
 
-            <button className={style.submitBtn}>
+            <button
+              className={style.submitBtn}
+              onClick={() => {
+                handleFormSubmit();
+              }}
+            >
               Add Wallpaper
             </button>
           </div>

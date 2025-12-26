@@ -1,13 +1,15 @@
-
-import { Outlet } from 'react-router-dom'
-import style from "./App.module.css"
+import { Outlet } from "react-router-dom";
+import style from "./App.module.css";
+import { Store } from "./Store";
 
 function App() {
   return (
     <div className={style.mainFrame}>
-      <Outlet />
+      <Store>
+        <Outlet />
+      </Store>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
