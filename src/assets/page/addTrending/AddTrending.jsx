@@ -1,46 +1,43 @@
 import NavBar from "../../components/NavBar";
 import style from "../editTrending/EditGallery.module.css";
 import pageStyle from "../addCategory/AddCategory.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Loader from "../../components/Loader";
-
-// Dummy Data (Non-Trending Wallpapers)
-// Dummy Data (Non-Trending Wallpapers)
-const initialWallpapers = Array.from({ length: 250 }).map((_, i) => ({
-  id: `new-wall-${i}`,
-  url: `https://picsum.photos/seed/${i + 200}/200/300`,
-}));
+import { context } from "../../../Store";
+import { toast } from "react-toastify";
 
 export default function AddTrending() {
-  const [wallpapers, setWallpapers] = useState(initialWallpapers);
+  const data = useContext(context);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [isAdding, setIsAdding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 100;
-
   useEffect(() => {
-    // Simulate Fetching Data
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    setIsLoading(true);
+    data.getNONSpecialWallpaper(
+      "getNonTrending",
+      data.setWallpapers,
+      (isSuccess, message) => {
+        console.log("data loaded");
+        setIsLoading(false);
+      }
+    );
   }, []);
-
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = wallpapers.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(wallpapers.length / itemsPerPage);
+  const currentItems = data.wallpapers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(data.wallpapers.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const toggleSelection = (id) => {
+  const toggleSelection = (_id) => {
     const newSelection = new Set(selectedIds);
-    if (newSelection.has(id)) {
-      newSelection.delete(id);
+    if (newSelection.has(_id)) {
+      newSelection.delete(_id);
     } else {
-      newSelection.add(id);
+      newSelection.add(_id);
     }
     setSelectedIds(newSelection);
   };
@@ -65,13 +62,18 @@ export default function AddTrending() {
 
   const handleAdd = () => {
     setIsAdding(true);
-    // Simulate Server Request
-    setTimeout(() => {
-      // Remove from this list as they are now "Added" to Trending
-      setWallpapers((prev) => prev.filter((w) => !selectedIds.has(w.id)));
-      setSelectedIds(new Set());
+    data.addTrendingWallpapers(selectedIds, (isSuccess, message) => {
       setIsAdding(false);
-    }, 2000);
+      if (isSuccess) {
+        toast.success(message);
+        data.setWallpapers((prev) =>
+          prev.filter((w) => !selectedIds.has(w._id))
+        );
+        setSelectedIds(new Set());
+      } else {
+        toast.error(message);
+      }
+    });
   };
 
   const isAllSelected =
@@ -137,26 +139,26 @@ export default function AddTrending() {
               <div className={style.imageGrid}>
                 {currentItems.map((wall) => (
                   <div
-                    key={wall.id}
+                    key={wall._id}
                     className={`${style.imageCard} ${
                       selectedIds.has(wall.id) ? style.selected : ""
                     }`}
-                    onClick={() => toggleSelection(wall.id)}
+                    onClick={() => toggleSelection(wall._id)}
                   >
                     <div className={style.selectionOverlay}>
                       <input
                         type="checkbox"
                         className={style.checkbox}
-                        checked={selectedIds.has(wall.id)}
+                        checked={selectedIds.has(wall._id)}
                         onChange={() => {}}
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleSelection(wall.id);
+                          toggleSelection(wall._id);
                         }}
                       />
                     </div>
                     <img
-                      src={wall.url}
+                      src={wall.previewUrl}
                       alt="Wallpaper"
                       className={style.cardImg}
                       loading="lazy"

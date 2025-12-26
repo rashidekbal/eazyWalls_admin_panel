@@ -1,10 +1,18 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { GET_CATEGORIES, GET_WALLPAPER } from "./assets/Apis/GeneralApi.js";
+import {
+  GET_CATEGORIES,
+  GET_WALLPAPER,
+  GET_WALLPAPER_NO_CATEGORY,
+} from "./assets/Apis/GeneralApi.js";
 import {
   ADD_CATEGORY,
+  ADD_FEATURED,
+  ADD_TRENDING,
   ADD_WALLPAPER,
   DELETE_WALLPAPER,
+  REMOVE_FEATURED,
+  REMOVE_TRENDING,
   UPDATE_CATEGORY_PREVIEW,
 } from "./assets/Apis/AdminApi.js";
 const api = axios.create({
@@ -37,6 +45,21 @@ const getWallpaper = async (categoryTitle, setLoading, setWallpapers) => {
       "error fetching wallpaper of category: " + categoryTitle + " : " + error
     );
     setLoading(false);
+  }
+};
+const getNONSpecialWallpaper = async (type, setWallpapers, getStatus) => {
+  let Url = GET_WALLPAPER_NO_CATEGORY + type;
+  try {
+    let response = await api.get(Url);
+    setWallpapers(response.data.Data);
+    getStatus(true, "success");
+  } catch (error) {
+    console.log("error fetching wallpaper of no category: " + " : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to upload wallpaper";
+    getStatus(false, message);
   }
 };
 
@@ -117,6 +140,82 @@ const updateCategoryPreviewImage = async (data, updateStatus) => {
     updateStatus(false, message);
   }
 };
+const removeTrendingWallpapers = async (data, updateStatus) => {
+  const Url = REMOVE_TRENDING;
+  let selectedIds = "";
+  data.forEach((item) => {
+    selectedIds += item + ",";
+  });
+  try {
+    await api.patch(Url, { ids: selectedIds });
+
+    updateStatus(true, "success fully removed trending wallpaper");
+  } catch (error) {
+    console.log("error removing trending wallpaper  : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to remove trending wallpaper";
+    updateStatus(false, message);
+  }
+};
+const removeFeaturedWallpapers = async (data, updateStatus) => {
+  const Url = REMOVE_FEATURED;
+  let selectedIds = "";
+  data.forEach((item) => {
+    selectedIds += item + ",";
+  });
+  try {
+    await api.patch(Url, { ids: selectedIds });
+
+    updateStatus(true, "success fully removed featured");
+  } catch (error) {
+    console.log("error removing  featured wallpaper : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to remove featured wallpaper";
+    updateStatus(false, message);
+  }
+};
+const addTrendingWallpapers = async (data, updateStatus) => {
+  const Url = ADD_TRENDING;
+  let selectedIds = "";
+  data.forEach((item) => {
+    selectedIds += item + ",";
+  });
+  try {
+    await api.post(Url, { ids: selectedIds });
+
+    updateStatus(true, "success fully added to trending");
+  } catch (error) {
+    console.log("error adding trenidng wallpaper : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to remove wallpaper";
+    updateStatus(false, message);
+  }
+};
+const addFeaturedWallpapers = async (data, updateStatus) => {
+  const Url = ADD_FEATURED;
+  let selectedIds = "";
+  data.forEach((item) => {
+    selectedIds += item + ",";
+  });
+  try {
+    await api.post(Url, { ids: selectedIds });
+
+    updateStatus(true, "success fully added to featured");
+  } catch (error) {
+    console.log("error adding to featured wallpaper : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to add to featured wallpaper";
+    updateStatus(false, message);
+  }
+};
 const context = createContext();
 function Store({ children }) {
   const [categories, setCategories] = useState([]);
@@ -189,6 +288,11 @@ function Store({ children }) {
         AddCategories,
         deleteWallpapers,
         updateCategoryPreviewImage,
+        removeTrendingWallpapers,
+        addFeaturedWallpapers,
+        addTrendingWallpapers,
+        removeFeaturedWallpapers,
+        getNONSpecialWallpaper,
       }}
     >
       {children}
