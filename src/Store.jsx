@@ -58,7 +58,7 @@ const getNONSpecialWallpaper = async (type, setWallpapers, getStatus) => {
     const message =
       error.response && error.response.data && error.response.data.message
         ? error.response.data.message
-        : "Failed to upload wallpaper";
+        : "Failed to fetch wallpaper";
     getStatus(false, message);
   }
 };
