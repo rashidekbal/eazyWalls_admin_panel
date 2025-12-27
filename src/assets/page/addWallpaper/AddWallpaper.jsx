@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { context } from "../../../Store";
 import NavBar from "../../components/NavBar";
 import style from "./AddWallpaper.module.css";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 
 export default function AddWallpaper() {
   const data = useContext(context);
@@ -11,12 +11,14 @@ export default function AddWallpaper() {
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
-  const [isTrending, setIsTrending] = useState(false);
+  const [isTrending, setIsTrending] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
-
+  useEffect(() => {
+    data.getCategories(data.setCategories);
+  }, []);
   // Drag & Drop Handlers
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -64,8 +66,6 @@ export default function AddWallpaper() {
     const file = image;
     const categoryTitle = category;
     const tag = tags.join(",");
-    const trending = isTrending;
-    const featured = isFeatured;
     if (!authorName || !file || !categoryTitle || !tag) {
       toast.warn("Please fill all required fields");
       return;
@@ -76,8 +76,8 @@ export default function AddWallpaper() {
       category: categoryTitle,
       tags: tag,
       authorName,
-      isTrenidng: trending,
-      isFeatured: featured,
+      isTrending,
+      isFeatured,
     };
     data.AddWallpaper(dataPacket, (status, message) => {
       setIsUploading(false);
@@ -88,7 +88,7 @@ export default function AddWallpaper() {
         setCategory("");
         setTags([]);
         setTagInput("");
-        setIsTrending(false);
+        setIsTrending(true);
         setIsFeatured(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
@@ -207,7 +207,9 @@ export default function AddWallpaper() {
                   <input
                     type="checkbox"
                     checked={isTrending}
-                    onChange={(e) => setIsTrending(e.target.checked)}
+                    onChange={(e) => {
+                      setIsTrending(e.target.checked);
+                    }}
                   />
                   Trending
                 </label>
@@ -215,7 +217,9 @@ export default function AddWallpaper() {
                   <input
                     type="checkbox"
                     checked={isFeatured}
-                    onChange={(e) => setIsFeatured(e.target.checked)}
+                    onChange={(e) => {
+                      setIsFeatured(e.target.checked);
+                    }}
                   />
                   Featured
                 </label>

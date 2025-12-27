@@ -150,7 +150,7 @@ export default function AddFeatured() {
                       <input
                         type="checkbox"
                         className={style.checkbox}
-                        checked={selectedIds.has(wall.id)}
+                        checked={selectedIds.has(wall._id)}
                         onChange={() => {}}
                         onClick={(e) => {
                           e.stopPropagation();
