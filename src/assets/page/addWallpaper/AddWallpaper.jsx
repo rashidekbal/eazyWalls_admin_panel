@@ -7,7 +7,7 @@ import { useState, useRef, useContext, useEffect } from "react";
 export default function AddWallpaper() {
   const data = useContext(context);
   const [image, setImage] = useState(null);
-  const [author, setAuthor] = useState("");
+  const [author, setAuthor] = useState("rashid");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
@@ -84,11 +84,11 @@ export default function AddWallpaper() {
       if (status) {
         toast.success(message);
         setImage(null);
-        setAuthor("");
-        setCategory("");
-        setTags([]);
-        setTagInput("");
-        setIsTrending(true);
+        // setAuthor("rashid");
+        // setCategory("Anime");
+        // setTags(["anime"]);
+        // setTagInput("");
+        setIsTrending(false);
         setIsFeatured(false);
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {

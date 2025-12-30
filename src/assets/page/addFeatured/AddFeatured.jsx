@@ -68,7 +68,9 @@ export default function AddFeatured() {
     data.addFeaturedWallpapers(selectedIds, (isSuccess, message) => {
       if (isSuccess) {
         toast.success(message);
-        setWallpapers((prev) => prev.filter((w) => !selectedIds.has(w._id)));
+        data.setWallpapers((prev) =>
+          prev.filter((w) => !selectedIds.has(w._id))
+        );
         setSelectedIds(new Set());
       } else {
         toast.error(message);

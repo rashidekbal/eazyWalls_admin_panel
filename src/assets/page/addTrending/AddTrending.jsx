@@ -46,15 +46,15 @@ export default function AddTrending() {
     if (selectedIds.size === currentItems.length) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(currentItems.map((w) => w.id)));
+      setSelectedIds(new Set(currentItems.map((w) => w._id)));
     }
   };
 
   const inverseSelection = () => {
     const newSelection = new Set();
     currentItems.forEach((w) => {
-      if (!selectedIds.has(w.id)) {
-        newSelection.add(w.id);
+      if (!selectedIds.has(w._id)) {
+        newSelection.add(w._id);
       }
     });
     setSelectedIds(newSelection);
@@ -141,7 +141,7 @@ export default function AddTrending() {
                   <div
                     key={wall._id}
                     className={`${style.imageCard} ${
-                      selectedIds.has(wall.id) ? style.selected : ""
+                      selectedIds.has(wall._id) ? style.selected : ""
                     }`}
                     onClick={() => toggleSelection(wall._id)}
                   >
