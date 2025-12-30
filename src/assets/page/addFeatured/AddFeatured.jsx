@@ -1,4 +1,5 @@
 import NavBar from "../../components/NavBar";
+import WallpaperCard from "../../components/WallpaperCard";
 import style from "../editTrending/EditGallery.module.css";
 import pageStyle from "../addCategory/AddCategory.module.css";
 import { useState, useEffect, useContext } from "react";
@@ -141,32 +142,12 @@ export default function AddFeatured() {
               {/* Grid */}
               <div className={style.imageGrid}>
                 {currentItems.map((wall) => (
-                  <div
+                  <WallpaperCard
                     key={wall._id}
-                    className={`${style.imageCard} ${
-                      selectedIds.has(wall._id) ? style.selected : ""
-                    }`}
-                    onClick={() => toggleSelection(wall._id)}
-                  >
-                    <div className={style.selectionOverlay}>
-                      <input
-                        type="checkbox"
-                        className={style.checkbox}
-                        checked={selectedIds.has(wall._id)}
-                        onChange={() => {}}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSelection(wall._id);
-                        }}
-                      />
-                    </div>
-                    <img
-                      src={wall.previewUrl}
-                      alt="Wallpaper"
-                      className={style.cardImg}
-                      loading="lazy"
-                    />
-                  </div>
+                    wallpaper={wall}
+                    isSelected={selectedIds.has(wall._id)}
+                    onToggle={toggleSelection}
+                  />
                 ))}
               </div>
 
