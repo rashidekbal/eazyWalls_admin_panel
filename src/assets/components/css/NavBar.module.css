@@ -213,6 +213,7 @@
   /* Mobile Dropdowns */
   .dropdownItem {
     flex-direction: column; /* Stack Label and Menu */
+    height: 50px;
   }
 
   .dropdownMenu {

@@ -1,3 +1,4 @@
+// const baseUrl = "https://rjwqzfvg-8000.inc1.devtunnels.ms";
 const baseUrl = "http://localhost:8000";
 const ADD_WALLPAPER = baseUrl + "/api/v1/admin/wallpaper/";
 const DELETE_WALLPAPER = ADD_WALLPAPER;
