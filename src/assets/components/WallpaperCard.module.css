@@ -32,6 +32,27 @@
   z-index: 2;
 }
 
+.editOverlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.6);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+.editOverlay:hover {
+    background: rgba(0, 212, 255, 0.8);
+}
+
 .checkbox {
   width: 20px;
   height: 20px;

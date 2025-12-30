@@ -7,6 +7,7 @@ const REMOVE_TRENDING = baseUrl + "/api/v1/admin/trending/remove/";
 const ADD_TRENDING = baseUrl + "/api/v1/admin/trending/add/";
 const REMOVE_FEATURED = baseUrl + "/api/v1/admin/featured/remove/";
 const ADD_FEATURED = baseUrl + "/api/v1/admin/featured/add/";
+const UPDATE_WALLPAPER = baseUrl + "/api/v1/admin/wallpaper/update";
 
 export {
   baseUrl,
@@ -18,4 +19,5 @@ export {
   ADD_TRENDING,
   REMOVE_FEATURED,
   ADD_FEATURED,
+  UPDATE_WALLPAPER,
 };

@@ -1,4 +1,5 @@
 import style from "./WallpaperCard.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function WallpaperCard({
   wallpaper,
@@ -6,6 +7,8 @@ export default function WallpaperCard({
   onToggle,
   className,
 }) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={`${style.card} ${isSelected ? style.selected : ""} ${
@@ -25,6 +28,18 @@ export default function WallpaperCard({
           }}
         />
       </div>
+
+      {/* Edit Button Overlay */}
+      <div
+        className={style.editOverlay}
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/edit-wallpaper/${wallpaper._id}`, { state: wallpaper });
+        }}
+      >
+        ✏️
+      </div>
+
       <img
         src={wallpaper.previewUrl}
         alt="Wallpaper"

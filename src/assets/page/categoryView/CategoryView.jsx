@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import NavBar from "../../components/NavBar";
 import style from "./CategoryView.module.css";
@@ -8,6 +8,7 @@ import { context } from "../../../Store";
 export default function CategoryView() {
   const data = useContext(context);
   const { categoryName } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
@@ -175,6 +176,20 @@ export default function CategoryView() {
                       }}
                     />
                   </div>
+
+                  {/* Edit Button Overlay */}
+                  <div
+                    className={style.editOverlay}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/edit-wallpaper/${img._id}`, {
+                        state: { ...img, category: categoryName },
+                      });
+                    }}
+                  >
+                    ✏️
+                  </div>
+
                   <img
                     src={img.previewUrl}
                     alt="Wallpaper"

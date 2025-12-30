@@ -14,6 +14,7 @@ import {
   REMOVE_FEATURED,
   REMOVE_TRENDING,
   UPDATE_CATEGORY_PREVIEW,
+  UPDATE_WALLPAPER,
 } from "./assets/Apis/AdminApi.js";
 const api = axios.create({
   baseURL: "http://localhost:8000",
@@ -216,6 +217,30 @@ const addFeaturedWallpapers = async (data, updateStatus) => {
     updateStatus(false, message);
   }
 };
+const updateWallpaper = async (data, updateStatus) => {
+  const Url = UPDATE_WALLPAPER;
+  try {
+    const formData = {
+      id: data.id,
+      category: data.category,
+      tags: data.tags,
+      author: data.author,
+      isTrending: data.isTrending ? true : false,
+      isFeatured: data.isFeatured ? true : false,
+    };
+
+    await api.patch(Url, formData);
+    updateStatus(true, "Wallpaper updated successfully");
+  } catch (error) {
+    console.log("error updating wallpaper : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to update wallpaper";
+    updateStatus(false, message);
+  }
+};
+
 const context = createContext();
 function Store({ children }) {
   const [categories, setCategories] = useState([]);
@@ -292,7 +317,9 @@ function Store({ children }) {
         addFeaturedWallpapers,
         addTrendingWallpapers,
         removeFeaturedWallpapers,
+        removeFeaturedWallpapers,
         getNONSpecialWallpaper,
+        updateWallpaper,
       }}
     >
       {children}
