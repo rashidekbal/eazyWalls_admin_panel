@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
   GET_CATEGORIES,
@@ -11,6 +11,7 @@ import {
   ADD_TRENDING,
   ADD_WALLPAPER,
   DELETE_WALLPAPER,
+  DELETE_CATEGORY,
   REMOVE_FEATURED,
   REMOVE_TRENDING,
   UPDATE_CATEGORY_PREVIEW,
@@ -43,7 +44,7 @@ const getWallpaper = async (categoryTitle, setLoading, setWallpapers) => {
     setLoading(false);
   } catch (error) {
     console.log(
-      "error fetching wallpaper of category: " + categoryTitle + " : " + error
+      "error fetching wallpaper of category: " + categoryTitle + " : " + error,
     );
     setLoading(false);
   }
@@ -138,6 +139,19 @@ const updateCategoryPreviewImage = async (data, updateStatus) => {
       error.response && error.response.data && error.response.data.message
         ? error.response.data.message
         : "Failed to update category";
+    updateStatus(false, message);
+  }
+};
+const deleteCategory = async (title, updateStatus) => {
+  try {
+    await api.delete(DELETE_CATEGORY, { data: { category: title } });
+    updateStatus(true, "success fully removed  category");
+  } catch (error) {
+    console.log("error removing category  : " + error);
+    const message =
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to remove category";
     updateStatus(false, message);
   }
 };
@@ -320,6 +334,7 @@ function Store({ children }) {
         removeFeaturedWallpapers,
         getNONSpecialWallpaper,
         updateWallpaper,
+        deleteCategory,
       }}
     >
       {children}

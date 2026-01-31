@@ -65,7 +65,7 @@ export default function CategoryView() {
       if (status) {
         toast.success(message);
         data.setWallpapers((prev) =>
-          prev.filter((w) => !selectedIds.has(w._id))
+          prev.filter((w) => !selectedIds.has(w._id)),
         );
         setSelectedIds(new Set());
       } else {
@@ -91,6 +91,36 @@ export default function CategoryView() {
           </div>
 
           <div className={style.toggleGroup}>
+            <button
+              className={style.deleteBtn}
+              style={{
+                backgroundColor: "#ff4444",
+                color: "white",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: "4px",
+                marginRight: "10px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `Are you sure you want to delete the category "${categoryName}"? This action cannot be undone.`,
+                  )
+                ) {
+                  data.deleteCategory(categoryName, (success, msg) => {
+                    if (success) {
+                      toast.success(msg);
+                      navigate("/");
+                    } else {
+                      toast.error(msg);
+                    }
+                  });
+                }
+              }}
+            >
+              Delete Category
+            </button>
             <button
               className={`${style.toggleBtn} ${
                 viewMode === "masonry" ? style.active : ""
